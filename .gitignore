@@ -1,0 +1,5 @@
+*.pyc
+/draw/labels
+/draw/test
+/empty
+/.idea
