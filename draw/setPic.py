@@ -3,6 +3,7 @@ import numpy as np
 import random
 import pygame
 import os
+import file_config as fconfig
 import shutil
 from seg import picInput,img_data
 word_color = [(142, 143, 142), (126, 135, 255), (0, 0, 0), (191, 69, 0), (255, 0, 0)]
@@ -191,7 +192,7 @@ class pygametxt(txt):
     def rotate(self,txt_render,angle):
         text=pygame.transform.rotate(txt_render,angle)
         return text
-    def set_font(self, path="../font/simsun.ttc", size=36):
+    def set_font(self, path="./font/simsun.ttc", size=36):
         fontObject = pygame.font.Font(path, size)
         self.font = fontObject
         # print(size)
@@ -216,7 +217,7 @@ class pygametxt(txt):
     def draw_txt(self, img, point, content, if_numpy=True):
         width=self.width
         height = self.height
-        step = 10
+        step = 30
 
         self.get_font_size()
         self.get_color_rand()
@@ -252,7 +253,7 @@ def rand_it(radio=0.7):
 
 def get_dict():
     d = []
-    with open("../dict/chinese_cht_dict.txt",encoding="utf8") as f:
+    with open("./dict/chinese_cht_dict.txt",encoding="utf8") as f:
         lines = f.readlines()
         for line in lines:
             line = line.strip()
@@ -369,40 +370,50 @@ def rand_sample(len, k):
     return random.sample(range(1, len), k)
 
 
-def main():
-    # pygametxt().set_rorate_angle()
-    # print(get_similir_normal(10))
-    # return
-    # pass
-    t=pygametxt()
+def main(start,end,t,sig):
+
+    #判断是否是txt
+    assert isinstance(t,txt)
+    # t=pygametxt()
     ##仅仅生成空图
+
+
     only_empty=False
 
     pic_hub=picInput()
-    pic_hub.add_from_path("../empty")
-    dx = "tmp"
-    for i in range(5):
+    pic_hub.add_from_path(fconfig.empty_pic_path)
+    dx = f"tmp{start}"
+
+
+
+    for i in range(start,end,1):
         rand_words=random.randint(5,10)
         rand_num=random.randint(5,10)
         words=get_txt(rand_words)
         nums=get_all_num(rand_num)
-        print(i)
+        # print(i)
         words=words+nums
         # _w,_h=get_w_h(height,width,row,cow)
         pic=pic_hub.get_one_pic()
         img=pic.crop()
 
+
         if not only_empty:
             cow=pic.cow
             row=pic.row
-            f=open(f"./labels/{i}.png.txt","w+",encoding="utf8")
+            px=os.path.join(fconfig.label_path,f"{i}.png.txt")
+            f=open(px,"w+",encoding="utf8")
             t.set_img(img)
 
             if not os.path.exists(dx):
                 os.mkdir(dx)
             path_tmp=f"./{dx}/{i}.png"
             img.save(path_tmp)
-            img=pygame.image.load(path_tmp)
+            if isinstance(t,pygametxt):
+                img=pygame.image.load(path_tmp)
+            # else:
+            #     img=Image.open(path_tmp)
+
             for word in words:
                 point = [random.randint(0, cow), random.randint(0, row)]
                 img,po=t.draw_txt(img,point,word,if_numpy=False)
@@ -413,11 +424,17 @@ def main():
             f.close()
         # cv2.imshow("1.",img)
         # cv2.waitKey(0)
+        img_save_path=os.path.join(fconfig.img_path,f"{i}.png")
+        if isinstance(t,pygametxt):
+            pygame.image.save(img,img_save_path)
+        else:
+            img.save(img_save_path)
 
-        pygame.image.save(img,f"./test/{i}.png")
         # img.save(open(f"./test/{i}.png","w+"),'png')
     # dx = "tmp"
     shutil.rmtree(f"./{dx}")
+
+    sig+=1
 if __name__ == '__main__':
     # img=Image.open("../1.png")
     # t=txt()
@@ -425,6 +442,9 @@ if __name__ == '__main__':
     # img.save("./2.png")
     # get_normal(10)
 
+    # t=pygametxt()
+    # print(isinstance(t,pygametxt))
+    #
     main()
 
     # t=txt()
