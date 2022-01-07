@@ -19,7 +19,7 @@ class txt():
     def set_img(self, img):
         self.buff=np.zeros(img.size[0:2])
         self.width,self.height=img.size[0:2]
-    def set_font(self, path="../font/simsun.ttc", size=36):
+    def set_font(self, path="./font/simsun.ttc", size=36):
         font = ImageFont.truetype(path, size)
         self.font = font
         # print(size)

@@ -1,5 +1,5 @@
-save_path="./output"
-empty_pic_path="./empty"
+save_path="/content/fcn-base/dataset/bigger"
+empty_pic_path="/content/drive/MyDrive/data/empty"
 label_path=save_path+"/label/"
 img_path=save_path+"/test/"
 
