@@ -5,7 +5,7 @@ img_path=save_path+"/test/"
 
 
 ## 线程相
-num_txt=2
+num_txt=1
 num_pytxt=2
 
-base=10
+base=2

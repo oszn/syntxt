@@ -1,11 +1,11 @@
-import numpy as np
-from numpy.linalg import cholesky
+from numpy import random
 import matplotlib.pyplot as plt
+import seaborn as sns
 
-sampleNo = 10000;
-mu = 1
-sigma = 0.1
-np.random.seed(0)
-s = np.random.normal(mu, sigma, sampleNo)
-plt.hist(s,300)
+
+# x=random.normal
+
+
+x=random.normal(loc=1,scale=0.001,size=100)
+sns.distplot(x, hist=False)
 plt.show()

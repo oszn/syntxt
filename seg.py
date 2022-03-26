@@ -29,9 +29,15 @@ class img_data():
         self.width=width
     def get_w_h(self):
         return get_w_h(self.height,self.width,self.row,self.cow)
+
+    def get_cow_row(self):
+        cow=random.randint(700,1200)
+        row=random.randint(700,1200)
+        return cow,row
     def crop(self):
         _h,_w=self.get_w_h()
-        img=crop(self.img,_h,_w,self.cow,self.row)
+        cow,row=self.get_cow_row()
+        img=crop(self.img,_h,_w,cow,row)
         return img
 
 def get_empty(path):
@@ -47,6 +53,7 @@ class picInput():
     def __init__(self):
         self.pic_list=[]
         pass
+
     def add_pic(self,pic):
         assert isinstance(pic,img_data)
         self.pic_list.append(pic)
@@ -54,9 +61,11 @@ class picInput():
     def add_from_path(self,path):
         ep_list=get_empty(path)
         self.add_from_list(ep_list)
+
     def get_rand(self):
         l= len(self.pic_list)
         return random.randint(0,l-1)
+
     def add_from_list(self,_list):
         assert isinstance(_list,list)
         for i in _list:

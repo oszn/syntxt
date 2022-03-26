@@ -73,7 +73,7 @@ class txt():
         _color=random.randint(0,self.color_slice)
         # if if_color:
         _color=int(_color)%len(self.color_rd)
-        now_color=word_color[int(self.color_rd[_color])]
+        now_color=(random.randint(0,255),random.randint(0,255),random.randint(0,255))
         fill=now_color
 
         self.set_color(fill)
@@ -262,7 +262,7 @@ def get_dict():
 
 
 def get_normal(arrlen):
-    sampleNo = 1000
+    sampleNo = 100
     mu = 85
     sigma = 4
     np.random.seed(0)
@@ -279,6 +279,7 @@ def get_normal(arrlen):
         output.append(tmp/_sum)
         _new_sum+=tmp
     # print(_sum,_new_sum)
+    # print(output)
     return output
 
 def get_similir_normal(arrlen):
@@ -322,8 +323,8 @@ def get_color():
 def get_font_size():
     slice=100
     # radio_list=[]
-    start=26
-    end=34
+    start=15
+    end=37
     hid=end-start
     radio_list=get_normal(hid)
     # print(radio_list.sum())
@@ -354,6 +355,7 @@ def draw_txt(t,img):
 
     # t = txt()
 def get_num(n=4):
+    n=random.randint(2,5)
     num = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     out = rand_sample(len(num), n)
     st = ""
@@ -442,10 +444,10 @@ if __name__ == '__main__':
     # img.save("./2.png")
     # get_normal(10)
 
-    # t=pygametxt()
+    t=pygametxt()
     # print(isinstance(t,pygametxt))
     #
-    main()
+    main(0,5,t,1)
 
     # t=txt()
     # draw_txt(t)
