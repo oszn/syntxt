@@ -13,8 +13,10 @@ ImageFile.LOAD_TRUNCATED_IMAGES = True
 Image.MAX_IMAGE_PIXELS = None
 import os
 import random
+from util._random import probabilityRandom
 
-## 数据对象
+proRandom=probabilityRandom()
+
 class img_data():
     def __init__(self,path,size=(1280,720)):
         self.cow=size[0]
@@ -30,14 +32,23 @@ class img_data():
     def get_w_h(self):
         return get_w_h(self.height,self.width,self.row,self.cow)
 
-    def get_cow_row(self):
-        cow=random.randint(700,1200)
-        row=random.randint(700,1200)
-        return cow,row
     def crop(self):
         _h,_w=self.get_w_h()
-        cow,row=self.get_cow_row()
-        img=crop(self.img,_h,_w,cow,row)
+        p400=proRandom.get_out_arr("norm",400)
+        p600=proRandom.get_out_arr("norm",600)
+        row=random.choice(p400)+500
+        cow=random.choice(p600)+700
+        # cow,row=self.get_cow_row()
+
+        img=self._crop(self.img,_h,_w,cow,row)
+        return img
+
+    def _crop(self,img,hei,wid,cow,row):
+
+        _w=min(self.width-1,wid+cow)
+        _h=min(self.height-1,hei+row)
+        # print(self.height,self.width,cow, row,wid,hei,_h,_w,"????????")
+        img=img.crop((wid,hei,_w,_h))
         return img
 
 def get_empty(path):
@@ -85,8 +96,8 @@ def main():
     height, width = img.size
     _h=rand_get(height-row)
     _w=rand_get(width-cow)
-    _img=crop(img,_h,_w,cow,row)
-    save(_img,"1.png")
+    # _img=crop(img,_h,_w,cow,row)
+    # save(_img,"1.png")
 # def rand_get_img(img,h,w,cow,row):
 def save(img,path):
     img.save(path)
@@ -95,16 +106,14 @@ def get_origin_pic(path):
     # cow = 1280
     # row = 720
     img = Image.open(path)
-    height, width = img.size
+    width, height = img.size
     return img,height,width
 def get_w_h(height,width,row,cow):
     _h = rand_get(height - row)
     _w = rand_get(width - cow)
+    # print(_h,_w,height,width,row,cow,"fffff")
     return _h,_w
-def crop(img,wid,hei,cow,row):
-    # print(wid,hei,cow,row)
-    # print(wid,hei,wid+cow,hei+row)
-    return img.crop((wid,hei,wid+cow,hei+row))
+
 def rand_get(val):
     h=random.randint(0,val)
     return h

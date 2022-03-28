@@ -6,6 +6,8 @@ import os
 import file_config as fconfig
 import shutil
 from seg import picInput,img_data
+from util._random import probabilityRandom
+
 word_color = [(142, 143, 142), (126, 135, 255), (0, 0, 0), (191, 69, 0), (255, 0, 0)]
 #灰  蓝 黑 暗红 红
 import cv2
@@ -67,7 +69,7 @@ class txt():
     def init_color_font(self):
         self.color_rd,self.color_slice=get_color()
         self.font_size,self.font_slice,self.font_start=get_font_size()
-
+        # print(self.font_size)
     def get_color_rand(self):
 
         _color=random.randint(0,self.color_slice)
@@ -145,6 +147,8 @@ class pygametxt(txt):
     def __init__(self):
         pygame.init()
         super().__init__()
+        # self.proRandom=probabilityRandom()
+
 
     def get_point(self, point, char_size,angle,text_create):
         x,y=point
@@ -192,12 +196,14 @@ class pygametxt(txt):
     def rotate(self,txt_render,angle):
         text=pygame.transform.rotate(txt_render,angle)
         return text
+
     def set_font(self, path="./font/simsun.ttc", size=36):
         fontObject = pygame.font.Font(path, size)
         self.font = fontObject
         # print(size)
         self.font.set_bold(True)
         return fontObject
+
     def set_rorate_angle(self):
         n=random.randint(0,9)
         angle=0
@@ -214,6 +220,7 @@ class pygametxt(txt):
         box_rotate = [p.rotate(-angle) for p in box]
         # print(box_rotate)
         return [int(box_rotate[2].x), int(box_rotate[2].y)]
+
     def draw_txt(self, img, point, content, if_numpy=True):
         width=self.width
         height = self.height
@@ -246,6 +253,9 @@ class pygametxt(txt):
         if if_numpy:
             img = np.array(img)
         return img, self.get_point(point, char_size,angle,creat_txt)
+
+proRandom=probabilityRandom()
+
 def rand_it(radio=0.7):
     a = random.uniform(0, 1)
     return a < radio
@@ -321,16 +331,14 @@ def get_color():
     return rd,slice
 
 def get_font_size():
-    slice=100
-    # radio_list=[]
-    start=15
-    end=37
+
+    start=10
+    end=50
     hid=end-start
-    radio_list=get_normal(hid)
-    # print(radio_list.sum())
-    radio_list=return_with_radioList(slice,radio_list)
-    # for i in range(start,end,1):
-    return radio_list,slice,start
+    radio_list=proRandom.get_out_arr("norm",hid)
+    _slice=radio_list.size
+
+    return radio_list,_slice,start
 
 def get_txt(num,start=1, radio=None):
     if radio is None:
@@ -398,7 +406,7 @@ def main(start,end,t,sig):
         # _w,_h=get_w_h(height,width,row,cow)
         pic=pic_hub.get_one_pic()
         img=pic.crop()
-
+        # print(img.size)
 
         if not only_empty:
             cow=pic.cow
@@ -410,6 +418,7 @@ def main(start,end,t,sig):
             if not os.path.exists(dx):
                 os.mkdir(dx)
             path_tmp=f"./{dx}/{i}.png"
+
             img.save(path_tmp)
             if isinstance(t,pygametxt):
                 img=pygame.image.load(path_tmp)
